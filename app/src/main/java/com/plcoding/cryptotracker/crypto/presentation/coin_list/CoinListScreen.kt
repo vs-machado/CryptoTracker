@@ -26,10 +26,12 @@ import com.plcoding.cryptotracker.ui.theme.CryptoTrackerTheme
  *
  * @param state UI state containing the loading status, list of coins to display,
  *              and the currently selected coin.
+ * @param onAction navigates to CoinDetailScreen and show coin details.
  */
 @Composable
 fun CoinListScreen(
     state: CoinListState,
+    onAction: (CoinListAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     if(state.isLoading) {
@@ -49,7 +51,7 @@ fun CoinListScreen(
             items(state.coins) { coinUi ->
                 CoinListItem(
                     coinUi = coinUi,
-                    onClick = {/*TODO*/},
+                    onClick = { onAction(CoinListAction.OnCoinClick(coinUi))},
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -69,7 +71,8 @@ private fun PreviewCoinListScreen() {
                 }
             ),
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
+                .background(MaterialTheme.colorScheme.background),
+            onAction = {}
         )
     }
 }
