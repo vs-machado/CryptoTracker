@@ -44,8 +44,11 @@ class CoinListViewModel(
 
     fun onAction(action: CoinListAction) {
         when(action) {
+            // Saves the selected coin details and display it on CoinDetailScreen
             is CoinListAction.OnCoinClick -> {
-
+                _state.update {
+                    it.copy(selectedCoin = action.coinUi)
+                }
             }
         }
     }
