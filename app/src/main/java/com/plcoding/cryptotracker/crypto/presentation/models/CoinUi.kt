@@ -4,12 +4,13 @@ import android.icu.text.NumberFormat
 import androidx.annotation.DrawableRes
 import com.plcoding.cryptotracker.crypto.domain.Coin
 import com.plcoding.cryptotracker.core.presentation.util.getDrawableIdForCoin
+import com.plcoding.cryptotracker.crypto.presentation.coin_detail.DataPoint
 import java.util.Locale
 
 /**
  * Represents a Coin in the UI layer.
  * [marketCapUsd], [priceUsd] and [changePercent24Hr] are converted to a human-readable format
- * using the [DisplayableNumber] data class, which provides both the raw [value] and a [formatted] string representation.
+ * using the [DisplayableNumber] data class, which provides both the raw [DisplayableNumber.value] and a [DisplayableNumber.formatted] string representation.
  */
 data class CoinUi(
     val id: String,
@@ -19,6 +20,7 @@ data class CoinUi(
     val marketCapUsd: DisplayableNumber,
     val priceUsd: DisplayableNumber,
     val changePercent24Hr: DisplayableNumber,
+    val coinPriceHistory: List<DataPoint> = emptyList(),
     @DrawableRes val iconRes: Int
 )
 
