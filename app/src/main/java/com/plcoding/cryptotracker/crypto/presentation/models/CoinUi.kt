@@ -42,13 +42,17 @@ fun Coin.toCoinUi(): CoinUi {
     )
 }
 
-fun Double.toDisplayableNumber(): DisplayableNumber {
-    val formatter = NumberFormat.getNumberInstance(Locale.getDefault()).apply {
-        minimumFractionDigits = 2
-        maximumFractionDigits = 2
+fun Double?.toDisplayableNumber(): DisplayableNumber {
+    return if (this != null) {
+        val formatter = NumberFormat.getNumberInstance(Locale.getDefault()).apply {
+            minimumFractionDigits = 2
+            maximumFractionDigits = 2
+        }
+        DisplayableNumber(
+            value = this,
+            formatted = formatter.format(this)
+        )
+    } else {
+        DisplayableNumber(value = 0.0, formatted = "ERROR")
     }
-    return DisplayableNumber(
-        value = this,
-        formatted = formatter.format(this)
-    )
 }
