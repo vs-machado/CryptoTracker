@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.plcoding.cryptotracker.core.domain.util.onError
 import com.plcoding.cryptotracker.core.domain.util.onSuccess
 import com.plcoding.cryptotracker.crypto.domain.CoinDataSource
+import com.plcoding.cryptotracker.crypto.presentation.coin_detail.DataPoint
 import com.plcoding.cryptotracker.crypto.presentation.models.CoinUi
 import com.plcoding.cryptotracker.crypto.presentation.models.toCoinUi
 import kotlinx.coroutines.channels.Channel
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 /**
  * ViewModel responsible for managing the cryptocurrency list screen's UI state.
@@ -67,7 +69,25 @@ class CoinListViewModel(
                     end = ZonedDateTime.now()
                 )
                 .onSuccess { history ->
-                    println(history)
+                    val dataPoints = history
+                        .sortedBy { it.date }
+                        .map {
+                            DataPoint(
+                                x = it.date.hour.toFloat(),
+                                y = it.priceUsd.toFloat(),
+                                xLabel = DateTimeFormatter
+                                    .ofPattern("ha\nM/d")
+                                    .format(it.date)
+                            )
+                        }
+
+                    _state.update {
+                        it.copy(
+                            selectedCoin = it.selectedCoin?.copy(
+                                coinPriceHistory = dataPoints
+                            )
+                        )
+                    }
                 }
                 .onError { error ->
                     _state.update { it.copy(isLoading = false) }
